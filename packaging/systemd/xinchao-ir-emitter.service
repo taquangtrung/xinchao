@@ -1,0 +1,32 @@
+# Re-arm the IR emitter at boot and on resume, before any face auth can run.
+#
+# The IR illuminator resets to dark on power-cycle and on resume from sleep, so
+# the LightDM greeter and the xinchao-unlockd daemon both capture black frames
+# until it is lit. This oneshot replays the activation payload that
+# `sudo xinchao enable-ir --apply` discovered and saved to /etc/xinchao/config.toml.
+#
+# Enable it with:
+#   sudo systemctl enable --now xinchao-ir-emitter.service
+#
+# If no activation has been saved yet it logs that and exits cleanly; run
+# `sudo xinchao enable-ir --apply` once (while looking at the camera) to persist one.
+
+[Unit]
+Description=Re-arm the xinchao IR emitter (boot and resume)
+Documentation=file:/usr/local/share/doc/xinchao/HANDS_FREE_UNLOCK.md
+# At boot, run before the display manager so the greeter's first capture is lit.
+# At resume, the sleep targets pull it in again (the device resets on suspend).
+After=suspend.target sleep.target hybrid-sleep.target hibernate.target suspend-then-hibernate.target
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# The uvcvideo node must exist before we can write the control payload.
+ExecStartPre=-/sbin/modprobe uvcvideo
+ExecStart=/usr/local/bin/xinchao enable-ir --boot
+# Needs the IR control node (video group) and the root-owned config.
+SupplementaryGroups=video
+
+[Install]
+WantedBy=multi-user.target suspend.target sleep.target hybrid-sleep.target hibernate.target suspend-then-hibernate.target

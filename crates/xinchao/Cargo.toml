@@ -1,0 +1,32 @@
+[package]
+name = "xinchao"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Windows Hello-style IR facial authentication for Linux via PAM"
+
+# Built as an rlib (consumed by the GUI and the `xinchao` binary) and a cdylib
+# (loaded by libpam as pam_xinchao.so; see the `pam` module).
+[lib]
+name = "xinchao"
+crate-type = ["rlib", "cdylib"]
+
+# Human-facing CLI to enroll, test, and diagnose.
+[[bin]]
+name = "xinchao"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+libc = "0.2"
+ort = "=2.0.0-rc.12"
+serde = { version = "1", features = ["derive"] }
+sha2 = "0.10"
+thiserror.workspace = true
+toml = "0.8"
+ureq = "3"
+v4l = "0.14"

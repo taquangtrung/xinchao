@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Xin Chao
+GenericName=Face Unlock
+Comment=Enroll your face and manage IR face unlock
+Exec=xinchao-gui
+Terminal=false
+Categories=Settings;Security;
+Keywords=xinchao;face;unlock;login;biometric;camera;
+Icon=xinchao

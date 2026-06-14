@@ -1,0 +1,30 @@
+# Example xinchao configuration.
+#
+# Install to /etc/xinchao/config.toml, owned by root and not world-writable:
+#   sudo install -D -m 0644 -o root -g root packaging/xinchao.toml /etc/xinchao/config.toml
+#
+# Every key is optional; omitted keys fall back to the built-in defaults shown
+# here. Run `xinchao config` to print the effective configuration.
+
+[camera]
+# IR node path. Omit to auto-detect (recommended; matches by greyscale format).
+# device = "/dev/v4l/by-id/usb-...-video-index0"
+frame_width = 640
+frame_height = 480
+warmup_frames = 3
+
+[recognition]
+backend = "onnx"                              # "onnx" | "dlib"
+model = "arcface"                             # "arcface" (accurate) | "sface" (fast); re-enroll when changed
+detector_path = "/etc/xinchao/models/version-RFB-320.onnx"     # face detector (UltraFace)
+model_path = "/etc/xinchao/models/arcfaceresnet100-8.onnx"     # recognition (ArcFace)
+threshold = 0.45                              # max distance to accept; lower = stricter
+required_matches = 2                          # frames that must match within one attempt
+
+[auth]
+timeout_secs = 2            # hard cap per attempt; keep low so a miss falls back fast
+detect_faces = true
+
+[debug]
+# Path to write debug frames; omit to disable. Use a root-only directory if set.
+# capture_path = "/var/lib/xinchao/debug"

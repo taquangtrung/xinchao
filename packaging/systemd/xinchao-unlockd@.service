@@ -1,0 +1,29 @@
+# Resident IR face-unlock daemon, one instance per user.
+#
+# Enable for a user with their login name as the instance:
+#   sudo systemctl enable --now xinchao-unlockd@<user>
+#
+# It watches systemd-logind for that user's graphical session locking and unlocks
+# it on a face match (loginctl unlock-session), so a logind-aware lock screen
+# (light-locker, xfce4-screensaver, gnome, ...) dismisses with no keystroke.
+
+[Unit]
+Description=xinchao IR face-unlock daemon for %i
+Documentation=file:/usr/local/share/doc/xinchao/HANDS_FREE_UNLOCK.md
+After=systemd-logind.service xinchao-ir-emitter.service
+Wants=systemd-logind.service xinchao-ir-emitter.service
+
+[Service]
+Type=simple
+# Runs as root: logind's Unlock is privileged, and the IR camera plus the
+# root-owned config and enrollments must be readable.
+ExecStart=/usr/local/bin/xinchao unlock-daemon --user %i
+Restart=on-failure
+RestartSec=2
+# Modest hardening; kept loose so the IR camera and the system bus stay reachable.
+SupplementaryGroups=video
+NoNewPrivileges=yes
+ProtectHome=read-only
+
+[Install]
+WantedBy=multi-user.target

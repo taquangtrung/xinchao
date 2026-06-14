@@ -1,0 +1,21 @@
+# Example: add face authentication to `sudo`, with password fallback.
+#
+# Do NOT copy this whole file over /etc/pam.d/sudo. Instead, add ONLY the
+# `pam_xinchao.so` line below as the FIRST `auth` line of your existing
+# /etc/pam.d/sudo, immediately above the `@include common-auth` line.
+#
+#   auth    sufficient    pam_xinchao.so
+#   @include common-auth
+#
+# `sufficient` means: if xinchao recognizes your face, sudo succeeds; if it does
+# not (no match, no camera, a timeout, or you press Ctrl-C), PAM falls through to
+# the normal password prompt. Face auth is additive: the password always works.
+#
+# SAFETY: keep a separate root shell open (e.g. run `sudo -s` in another
+# terminal) BEFORE editing this file, so a typo cannot lock you out. See
+# docs/INSTALL.md.
+
+auth    sufficient    pam_xinchao.so
+@include common-auth
+@include common-account
+@include common-session-noninteractive

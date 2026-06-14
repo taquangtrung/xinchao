@@ -1,0 +1,29 @@
+# Rust / Cargo build output
+/target
+target/
+Cargo.lock
+
+# Downloaded models and enrollment data (fetched/generated, never committed)
+/models/*.onnx
+/models/*.dat
+
+# Debug capture frames and other stray images (keep documentation and icons).
+*.png
+!docs/**/*.png
+!crates/xinchao-gui/assets/icons/*.png
+
+# Temporary, backup, and atomic-write leftovers
+*.tmp
+*.temp
+*.part
+*.bak
+*.orig
+*.rej
+*.log
+
+# Editor and OS junk
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
