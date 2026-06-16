@@ -1,10 +1,11 @@
 [package]
 name = "xinchao-gui"
-version = "0.1.0"
+version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+readme.workspace = true
 description = "Native egui GUI for xinchao enrollment and management"
 
 [[bin]]

@@ -1,10 +1,11 @@
 [package]
 name = "xinchao"
-version = "0.1.0"
+version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+readme.workspace = true
 description = "Windows Hello-style IR facial authentication for Linux via PAM"
 
 # Built as an rlib (consumed by the GUI and the `xinchao` binary) and a cdylib
